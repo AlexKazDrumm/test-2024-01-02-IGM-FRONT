@@ -1,6 +1,5 @@
 import { SortOption, OrderOption, CatalogType } from '../types';
 
-// Интерфейсы для строгой типизации конфигурации
 interface SortOptionLabel {
   value: SortOption;
   label: string;
@@ -30,7 +29,6 @@ interface CatalogTypeConfig {
   search: SearchConfig;
 }
 
-// Единый объект конфигурации для всех типов каталога
 const catalogSettings: Record<CatalogType, CatalogTypeConfig> = {
   movies: {
     defaultSort: 'popularity',

@@ -18,7 +18,7 @@ export const buildCatalogUrl = ({
   const params = new URLSearchParams();
 
   if (query) {
-    params.append('query', encodeURIComponent(query));
+    params.append('query', query);
   }
 
   if (page && page > 1) {

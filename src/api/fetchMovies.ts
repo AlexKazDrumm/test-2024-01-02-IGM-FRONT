@@ -13,13 +13,14 @@ export async function fetchMovies(
   current_page: number;
 }> {
   const sortParam = `${sort}.${order}`;
-  const validPage = Math.max(1, Math.min(page, 500)); // Ограничиваем страницы от 1 до 500
+  const validPage = Math.max(1, Math.min(page, 500));
 
   const endpoint = query
     ? `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=ru-RU&query=${encodeURIComponent(
         query
       )}&page=${validPage}`
     : `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=ru-RU&sort_by=${sortParam}&page=${validPage}`;
+
 
   const [moviesRes, genresRes] = await Promise.all([
     fetch(endpoint),
@@ -57,7 +58,7 @@ export async function fetchMovies(
     popularity: movie.popularity || null,
   }));
 
-  const totalPages = Math.min(moviesData.total_pages || 0, 500); // TMDB ограничивает до 500 страниц
+  const totalPages = Math.min(moviesData.total_pages || 0, 500);
   const totalResults = Math.min(moviesData.total_results || 0, 500 * 20);
 
   return {

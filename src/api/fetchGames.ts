@@ -20,16 +20,14 @@ export const fetchGames = async (
   const ordering = order === 'asc' ? sort : `-${sort}`;
 
   const params = new URLSearchParams({
-    page: page.toString(),
+      page: page.toString(),
   });
 
   if (searchQuery) {
-    params.append('search', searchQuery);
+      params.append('search', searchQuery);
   }
 
-  if (sort !== 'popularity') {
-    params.append('ordering', ordering);
-  }
+  params.append('ordering', ordering);
 
   const gamesUrl = `${baseUrl}?${params.toString()}`;
 
@@ -50,7 +48,6 @@ export const fetchGames = async (
     const gamesData = await gamesRes.json();
     const genresData = await genresRes.json();
 
-    // Создаём карту жанров для быстрого доступа по ID
     const genresMap: { [key: number]: string } = {};
     if (genresData) {
       genresData.forEach((genre: Genre) => {
@@ -58,7 +55,6 @@ export const fetchGames = async (
       });
     }
 
-    // Корректное отображение жанров
     const games: MediaItem[] = (gamesData.results || []).map((game: any) => ({
       id: game.id,
       type: 'games',

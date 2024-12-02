@@ -19,7 +19,7 @@ export interface Game {
   publisher?: string | null;
   license_type?: string | null;
   platform?: string | null;
-  imageUrl?: string | null; // Добавлено
+  imageUrl?: string | null;
 }
 
 export interface Movie {

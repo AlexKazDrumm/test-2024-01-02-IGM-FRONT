@@ -9,6 +9,6 @@ export default {
     extend: {},
   },
   plugins: [
-    import('@tailwindcss/line-clamp'), // Используем `import` вместо `require`
+    import('@tailwindcss/line-clamp'),
   ],
 };

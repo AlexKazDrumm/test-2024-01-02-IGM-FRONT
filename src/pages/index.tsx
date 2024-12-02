@@ -4,7 +4,6 @@ import Card from "../components/Card";
 import catalogSettings from '@/config/catalogConfig';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // Извлекаем homeSection для каждого типа
   const sections = Object.values(catalogSettings).map((config) => config.homeSection);
   return {
     props: {

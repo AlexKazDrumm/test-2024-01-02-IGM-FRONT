@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { truncateText } from '../utils/textUtils';
+import { truncateText } from '@/utils/truncateText';
 import { MediaItem } from '../types';
 import Button from './Button';
 import { useRouter } from 'next/router';
