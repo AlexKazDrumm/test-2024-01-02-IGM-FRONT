@@ -1,4 +1,4 @@
-import { CatalogType, SortOption, OrderOption } from '../types';
+import { CatalogType, SortOption, OrderOption } from '@/types';
 
 interface BuildCatalogUrlParams {
   type: CatalogType;

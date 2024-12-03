@@ -1,4 +1,4 @@
-import { SortOption, OrderOption, CatalogType } from '../types';
+import { SortOption, OrderOption, CatalogType } from '@/types';
 
 interface SortOptionLabel {
   value: SortOption;
@@ -122,5 +122,10 @@ const catalogSettings: Record<CatalogType, CatalogTypeConfig> = {
     },
   },
 };
+
+export const catalogItems = Object.keys(catalogSettings).map((key) => ({
+  href: `/catalog/${key}`,
+  label: catalogSettings[key as CatalogType].homeSection.title,
+}));
 
 export default catalogSettings;

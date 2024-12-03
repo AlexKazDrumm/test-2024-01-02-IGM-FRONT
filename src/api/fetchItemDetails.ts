@@ -1,4 +1,4 @@
-import { MediaItem, CatalogType } from '../types';
+import { MediaItem, CatalogType } from '@/types';
 
 export async function fetchItemDetails(type: CatalogType, id: string): Promise<MediaItem | null> {
   try {

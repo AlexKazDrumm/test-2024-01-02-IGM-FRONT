@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from 'next';
-import Layout from '../components/Layout';
+import Layout from '../components/UI/Layout';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {

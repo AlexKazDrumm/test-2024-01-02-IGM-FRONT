@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Button from './Button';
+import React, { useState, useEffect } from 'react';
+import Button from '../UI/Button';
 import FiltersContainer from './FiltersContainer';
 
 interface SearchBarProps {
@@ -15,6 +15,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [searchInput, setSearchInput] = useState<string>(initialQuery);
 
+  useEffect(() => {
+    setSearchInput(initialQuery);
+  }, [initialQuery]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedQuery = searchInput.trim();
@@ -22,10 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex gap-3 items-center"
-    >
+    <form onSubmit={handleSubmit} className="flex gap-3 items-center">
       <FiltersContainer>
         <input
           type="text"

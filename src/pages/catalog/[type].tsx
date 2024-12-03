@@ -1,16 +1,14 @@
-import { useRouter } from 'next/router';
 import type { GetServerSideProps } from 'next';
-import Layout from '../../components/Layout';
-import Card from '../../components/Card';
-import Pagination from '../../components/Pagination';
-import SearchBar from '../../components/SearchBar';
-import SortControls from '../../components/SortControls';
-import Loader from '../../components/Loader';
-import { fetchItems } from '../../api/fetchItems';
-import { useRouteLoading } from '../../hooks/useRouteLoading';
-import { buildCatalogUrl } from '../../utils/buildCatalogUrl';
+import Layout from '../../components/UI/Layout';
+import Loader from '../../components/Catalog/Loader';
+import { fetchItems } from '@/api/fetchItems';
+import { useRouteLoading } from '@/hooks/useRouteLoading';
 import catalogSettings from '@/config/catalogConfig';
-import { MediaItem, SortOption, OrderOption, CatalogType } from '../../types';
+import { MediaItem, SortOption, OrderOption, CatalogType } from '@/types';
+import { useEffect, useState } from 'react';
+import CatalogFilters from '@/components/Catalog/CatalogFilters';
+import CatalogContent from '@/components/Catalog/CatalogContent';
+import { useCatalog } from '@/hooks/useCatalog';
 
 interface CatalogProps {
   items: MediaItem[];
@@ -73,48 +71,32 @@ const CatalogPage: React.FC<CatalogProps> = ({
   order,
   type,
 }) => {
-  const router = useRouter();
   const loading = useRouteLoading(type);
 
-  const { typeTitle, placeholderUrl, sortOptions } = catalogSettings[type];
+  const { typeTitle, placeholderUrl, sortOptions, defaultSort, defaultOrder } = catalogSettings[type];
+  const [localQuery, setLocalQuery] = useState(query);
 
-  const updateCatalog = (
-    updatedParams: Partial<{
-      query: string;
-      page: number;
-      sort: SortOption;
-      order: OrderOption;
-    }>
-  ) => {
-    const newQuery = updatedParams.query !== undefined ? updatedParams.query : query;
-    const newPage = updatedParams.page !== undefined ? updatedParams.page : current_page;
-    const newSort = updatedParams.sort !== undefined ? updatedParams.sort : sort;
-    const newOrder = updatedParams.order !== undefined ? updatedParams.order : order;
+  useEffect(() => {
+    setLocalQuery(query);
+  }, [query]);
 
-    router.push(
-      buildCatalogUrl({
-        type,
-        query: newQuery,
-        page: newPage,
-        sort: newSort,
-        order: newOrder,
-      })
-    );
-  };
-
-  const handlePageChange = (page: number) => updateCatalog({ page });
-  const handleSearch = (searchQuery: string) =>
-    updateCatalog({ query: searchQuery, page: 1 });
-  const handleSortChange = (selectedSort: SortOption) =>
-    updateCatalog({ sort: selectedSort, page: 1 });
-  const handleOrderChange = (newOrder: OrderOption) =>
-    updateCatalog({ order: newOrder, page: 1 });
-  const handleResetFilters = () => router.push(`/catalog/${type}`);
+  const {
+    handlePageChange,
+    handleSearch,
+    handleSortChange,
+    handleOrderChange,
+    handleResetFilters,
+  } = useCatalog({
+    type,
+    currentParams: { query, page: current_page, sort, order },
+    defaultSort,
+    defaultOrder,
+  });
 
   const showResetButton = Boolean(
     query ||
-      sort !== catalogSettings[type].defaultSort ||
-      order !== catalogSettings[type].defaultOrder
+    sort !== defaultSort ||
+    order !== defaultOrder
   );
 
   return (
@@ -122,57 +104,32 @@ const CatalogPage: React.FC<CatalogProps> = ({
       <h1 className="text-3xl font-bold text-center text-gray-100 mb-6">
         Каталог {typeTitle}
       </h1>
-      <div className="flex flex-wrap gap-4 items-center mb-6">
-        <SearchBar
-          initialQuery={query}
-          onSearch={handleSearch}
-          placeholder={`Поиск ${typeTitle}...`}
-        />
-        <SortControls
-          sort={sort}
-          order={order}
-          onSortChange={handleSortChange}
-          onOrderChange={handleOrderChange}
-          sortOptions={sortOptions}
-          disabled={!!query}
-        />
-        {showResetButton && (
-          <button
-            onClick={handleResetFilters}
-            title="Сбросить фильтры"
-            className="text-red-500 text-xl"
-          >
-            &#10005;
-          </button>
-        )}
-      </div>
+      <CatalogFilters
+        localQuery={localQuery}
+        onSearch={handleSearch}
+        onSortChange={handleSortChange}
+        onOrderChange={handleOrderChange}
+        onReset={handleResetFilters}
+        sort={sort}
+        order={order}
+        sortOptions={sortOptions}
+        placeholder={`Поиск ${typeTitle}...`}
+        showResetButton={showResetButton}
+      />
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <Loader />
         </div>
-      ) : items.length === 0 ? (
-        <p className="text-center text-lg text-gray-500">
-          {typeTitle} не найдены.
-        </p>
       ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {items.map((item) => (
-              <Card
-                key={`${type}-${item.id}`}
-                item={item}
-                placeholderUrl={catalogSettings[type].placeholderUrl}
-              />
-            ))}
-          </div>
-          <div className="mt-8">
-            <Pagination
-              currentPage={current_page}
-              numPages={num_pages}
-              onPageChange={handlePageChange}
-            />
-          </div>
-        </>
+        <CatalogContent
+          items={items}
+          type={type}
+          placeholderUrl={placeholderUrl}
+          current_page={current_page}
+          num_pages={num_pages}
+          onPageChange={handlePageChange}
+          typeTitle={typeTitle}
+        />
       )}
     </Layout>
   );

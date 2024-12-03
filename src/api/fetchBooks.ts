@@ -1,4 +1,4 @@
-import { Book, Genre, SortOption, OrderOption } from '../types';
+import { Book, Genre, SortOption, OrderOption } from '@/types';
 
 interface FetchBooksResponse {
   books: Book[];

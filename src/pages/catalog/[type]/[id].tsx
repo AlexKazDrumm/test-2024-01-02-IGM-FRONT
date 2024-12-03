@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import type { GetServerSideProps } from 'next';
-import Layout from '@/components/Layout';
-import Button from '@/components/Button';
-import BookDetails from '@/components/ItemDetails/BookDetails';
-import GameDetails from '@/components/ItemDetails/GameDetails';
-import MovieDetails from '@/components/ItemDetails/MovieDetails';
-import BoardGameDetails from '@/components/ItemDetails/BoardGameDetails';
-import { fetchItemDetails } from '../../../api/fetchItemDetails';
-import { MediaItem, CatalogType } from '../../../types';
-import catalogSettings from '@/config/catalogConfig';
+import Layout from '@/components/UI/Layout';
+import Button from '@/components/UI/Button';
+import { fetchItemDetails } from '@/api/fetchItemDetails';
+import { MediaItem, CatalogType } from '@/types';
+import { getDetailsComponent } from '@/components/ItemDetails';
+import ImageWithFallback from '@/components/ItemDetails/ImageWithFallback';
 
 interface ItemDetailProps {
   item: MediaItem;
@@ -30,32 +27,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 const ItemDetail: React.FC<ItemDetailProps> = ({ item, type }) => {
   const router = useRouter();
-  const [imageSrc, setImageSrc] = useState<string>(
-    item.imageUrl || catalogSettings[type].placeholderUrl
-  );
 
-  const handleImageError = () => {
-    setImageSrc(catalogSettings[type].placeholderUrl);
-  };
-
-  const handleBackToCatalog = () => {
+  const handleBackToCatalog = useCallback(() => {
     router.push(`/catalog/${type}`);
-  };
+  }, [router, type]);
 
-  const renderSpecificDetails = () => {
-    switch (type) {
-      case 'books':
-        return <BookDetails item={item} />;
-      case 'games':
-        return <GameDetails item={item} />;
-      case 'movies':
-        return <MovieDetails item={item} />;
-      case 'board-games':
-        return <BoardGameDetails item={item} />;
-      default:
-        return null;
-    }
-  };
+  const DetailsComponent = getDetailsComponent(type);
 
   return (
     <Layout>
@@ -68,11 +45,11 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item, type }) => {
         />
         <div className="flex flex-wrap gap-5">
           <div className="flex-1 min-w-[300px] max-w-[400px]">
-            <img
-              src={imageSrc}
+            <ImageWithFallback
+              src={item.imageUrl ?? undefined}
               alt={item.title || 'Placeholder'}
+              type={type}
               className="w-full rounded-lg shadow-lg"
-              onError={handleImageError}
             />
           </div>
           <div className="flex-1 min-w-[300px]">
@@ -86,7 +63,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item, type }) => {
                 {item.genres.map((genre) => genre.name || genre).join(', ')}
               </p>
             )}
-            {renderSpecificDetails()}
+            {DetailsComponent && <DetailsComponent item={item} />}
           </div>
         </div>
       </div>

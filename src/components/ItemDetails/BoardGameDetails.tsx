@@ -1,5 +1,6 @@
 import React from 'react';
-import { MediaItem } from '../../types';
+import { MediaItem } from '@/types';
+import DetailField from './DetailField';
 
 interface BoardGameDetailsProps {
   item: MediaItem;
@@ -8,19 +9,16 @@ interface BoardGameDetailsProps {
 const BoardGameDetails: React.FC<BoardGameDetailsProps> = ({ item }) => (
   <div className="space-y-2">
     {item.min_players && item.max_players && (
-      <p className="text-sm text-gray-200">
-        <strong className="font-semibold text-white">Количество игроков:</strong> от {item.min_players} до {item.max_players}
-      </p>
+      <DetailField
+        label="Количество игроков"
+        value={`от ${item.min_players} до ${item.max_players}`}
+      />
     )}
     {item.duration && (
-      <p className="text-sm text-gray-200">
-        <strong className="font-semibold text-white">Длительность партии:</strong> {item.duration}
-      </p>
+      <DetailField label="Длительность партии" value={item.duration} />
     )}
     {item.publisher && (
-      <p className="text-sm text-gray-200">
-        <strong className="font-semibold text-white">Издатель:</strong> {item.publisher}
-      </p>
+      <DetailField label="Издатель" value={item.publisher} />
     )}
   </div>
 );

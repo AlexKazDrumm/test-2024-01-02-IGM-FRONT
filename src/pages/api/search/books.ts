@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fetchBooks } from '../../../api/fetchBooks';
+import { fetchBooks } from '@/api/fetchBooks';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const query = (req.query.query as string) || '';

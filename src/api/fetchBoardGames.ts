@@ -1,4 +1,4 @@
-import { MediaItem, Genre } from '../types';
+import { MediaItem, Genre } from '@/types';
 
 interface FetchBoardGamesResponse {
   items: MediaItem[];

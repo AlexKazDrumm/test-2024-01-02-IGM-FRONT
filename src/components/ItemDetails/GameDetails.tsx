@@ -1,5 +1,6 @@
 import React from 'react';
-import { MediaItem } from '../../types';
+import { MediaItem } from '@/types';
+import DetailField from './DetailField';
 
 interface GameDetailsProps {
   item: MediaItem;
@@ -8,14 +9,10 @@ interface GameDetailsProps {
 const GameDetails: React.FC<GameDetailsProps> = ({ item }) => (
   <div className="space-y-2">
     {item.publisher && (
-      <p className="text-sm text-gray-200">
-        <strong className="font-semibold text-white">Издатель:</strong> {item.publisher}
-      </p>
+      <DetailField label="Издатель" value={item.publisher} />
     )}
     {item.platform && (
-      <p className="text-sm text-gray-200">
-        <strong className="font-semibold text-white">Платформа:</strong> {item.platform}
-      </p>
+      <DetailField label="Платформа" value={item.platform} />
     )}
   </div>
 );

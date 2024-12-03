@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
-import Layout from "../components/Layout";
-import Card from "../components/Card";
+import Layout from "../components/UI/Layout";
+import Card from '@/components/Card/Card';
 import catalogSettings from '@/config/catalogConfig';
 
 export const getServerSideProps: GetServerSideProps = async () => {

@@ -1,4 +1,4 @@
-import { Movie, Genre, SortOption, OrderOption } from '../types';
+import { Movie, Genre, SortOption, OrderOption } from '@/types';
 
 export async function fetchMovies(
   page: number,

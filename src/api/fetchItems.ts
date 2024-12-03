@@ -2,7 +2,7 @@ import { fetchBooks } from './fetchBooks';
 import { fetchGames } from './fetchGames';
 import { fetchMovies } from './fetchMovies';
 import { fetchBoardGames } from './fetchBoardGames';
-import { MediaItem, Genre, SortOption, OrderOption, CatalogType } from '../types';
+import { MediaItem, Genre, SortOption, OrderOption, CatalogType } from '@/types';
 
 interface FetchItemsResponse {
   items: MediaItem[];
