@@ -18,10 +18,10 @@ const Card: React.FC<CardProps> = ({ item, placeholderUrl, detailsUrl }) => {
       className="border border-gray-700 rounded-lg p-4 bg-gray-800 flex flex-col shadow-md hover:shadow-blue-500/50 transition-shadow duration-300 cursor-default"
     >
       <CardImage
-        src={item.imageUrl ?? placeholderUrl} // Гарантируем, что src всегда строка
+        src={item.imageUrl ?? placeholderUrl}
         placeholderUrl={placeholderUrl}
         alt={item.title}
-        itemId={String(item.id)} // Преобразуем item.id в строку
+        itemId={String(item.id)}
       />
       <CardTitle title={item.title} />
       {item.description && <CardDescription description={item.description} />}
